@@ -26,7 +26,7 @@
     <div class="bar" style="width: 0;"></div>
     <a class="icon-home image-icon" href="javascript:;"></a>
     <div title="播放/暂停" class="icon-play"></div>
-    <h3 class="subtitle">xmn</h3>
+    <h3 class="subtitle">IQA论文总结‘</h3>
     <div class="social">
         <!--<div class="like-icon">-->
             <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
@@ -43,7 +43,7 @@
     <div class="section">
         <div class="article">
     <div class="main">
-        <h1 class="title">xmn</h1>
+        <h1 class="title">IQA论文总结‘</h1>
         <div class="stuff">
             <span>一月 13, 2019</span>
             
@@ -51,8 +51,28 @@
         </div>
         <div class="content markdown">
             <blockquote>
-<p>It’s new blog</p>
+<p>图像质量评估：有参考（FR），部分参考（RR），无参考（NR）</p>
 </blockquote>
+<h3 id="FR-IQA"><a href="#FR-IQA" class="headerlink" title="FR-IQA"></a>FR-IQA</h3><ul>
+<li>通过神经网络学习人类神视觉系统HVS的行为，对图像失真程度进行评估</li>
+<li>六层卷积层，两层FC,将distorted image以及它的error map作为输入，分别卷积之后级联，error map通过referenced image和distorted image得到.</li>
+<li><p>中间得到一个sensitivity map（针对的是人类视觉系统HVS而言，描述每个像素对HVS的视觉重要程度的加权图）</p>
+<p><a href="https://imgchr.com/i/FvhC4g" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/01/13/FvhC4g.md.png" alt="FvhC4g.md.png"></a><br><img src="https://s2.ax1x.com/2019/01/13/FvhebV.png" alt="FvhebV.png"></p>
+</li>
+</ul>
+<ul>
+<li>CNN1是Deep-QAs，一个简化的DQA网络，只包含上半部分的卷积和后面的，不需要级联<br>CNN2是完整的网络</li>
+<li>s=s1ors2</li>
+<li>p=se 进入FC生成主观打分，p是perceptual map，感知误差图，由客观误差图e乘以视觉权重图s得到</li>
+</ul>
+<h3 id="NR-IQA"><a href="#NR-IQA" class="headerlink" title="NR-IQA"></a>NR-IQA</h3><p><img src="https://s2.ax1x.com/2019/01/13/Fvh5xs.png" alt="Fvh5xs.png"><br><img src="https://s2.ax1x.com/2019/01/13/FvhoMn.png" alt="FvhoMn.png"><br>在FR基础上改动的，因为不能直接得到error map（现在没有参考图像），所以分为两个阶段，加入对于error map的预测</p>
+<ul>
+<li><p>第一阶段要进行error map的一个预测，目标函数带有参考图像，因为在训练模型过程中可以有参考图像</p>
+</li>
+<li><p>r是加入的一个reliability map，因为图像加入严重失真后缺少高频，而无参考质量评估没有原始图像，失真图像的模糊区域用来预测误差图不够可靠，所以加入r，在第一阶段的误差图预测以及第二阶段对于打分的预测当中都会用到</p>
+</li>
+<li>第二阶段进行预测subjective score，V是由预测误差图以及可靠图构成的特征图作为输入<br>同时加入两个手工特征（原因：标准化之后，图像会丢失一些信息，而且如果失真图像太模糊，则可靠区域变得太小。在这种情况下，失真图像的整体结构强度成为一个重要特征），r的均值以及distorted image的低频方差。</li>
+</ul>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
